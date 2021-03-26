@@ -5,10 +5,11 @@ type LayoutProps = {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
+  // TODO: Create Toolbar, Sidebar, and Backdrop components.
   return (
     <>
       <div>
-        // TODO: Create Toolbar, Sidebar, and Backdrop components.
+        <div>Toolbar, Sidebar, and Backdrop</div>
       </div>
       <main>
         {children}
