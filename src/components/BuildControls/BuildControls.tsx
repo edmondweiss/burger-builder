@@ -19,15 +19,18 @@ const formatMoney: FormatMoney = ((value) => {
 });
 
 export const BuildControls = ({ addHandler, items, price, removeHandler }: BuildControlsProps) => {
+  const purchasable: boolean = Object.keys(items).reduce(((previousValue, key) => previousValue + items[key]), 0) !== 0;
   return (
     <div className={styles.BuildControls}>
-      <p>Total Price: {formatMoney(price)}</p>
+      <p>Total Price: <strong>{formatMoney(price)}</strong></p>
       {Object.keys(items)
         .map((key) => <BuildControl
           key={key}
           label={key}
           addHandler={addHandler}
-          removeHandler={removeHandler}/>)}
+          removeHandler={removeHandler}
+          disableLess={items[key] === 0}/>)}
+          <button className={styles.OrderButton} disabled={!purchasable}>ORDER</button>
     </div>
   );
 };
