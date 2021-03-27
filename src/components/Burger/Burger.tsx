@@ -1,38 +1,30 @@
 import styles from "./Burger.module.scss";
-import { BurgerIngredient, BurgerIngredientType } from "./BurgerIngredient/BurgerIngredient";
+import { OptionalBurgerIngredient, isValidIngredient, BurgerIngredient } from "./BurgerIngredient/BurgerIngredient";
 import { nanoid } from "nanoid";
 import React, { ReactNode } from "react";
 
 
-type IngredientCount = number;
+export type BurgerIngredients = {
+  [key in OptionalBurgerIngredient]: {
+    count: number;
+    price: number;
+  };
+}
 
 export type BurgerProps = Readonly<{
-  ingredients: {
-    [key in Exclude<BurgerIngredientType, "bread-top" | "bread-bottom">]: IngredientCount;
-  }
-}>;
+  ingredients: BurgerIngredients;
+}>
 
 export const Burger = ({ ingredients }: BurgerProps) => {
-  const validIngredientsSet = new Set<BurgerIngredientType>([
-    "bacon",
-    "bread-top",
-    "bread-bottom",
-    "cheese",
-    "meat",
-    "salad"
-  ]);
 
-
-  const isValidIngredient = (ingredient: string): ingredient is BurgerIngredientType =>
-    validIngredientsSet.has(ingredient as BurgerIngredientType);
-
-  const createIngredientComponents = (ingredient: BurgerProps["ingredients"]): ReactNode[] | null => {
+  const createIngredientComponents = (ingredients: BurgerIngredients): ReactNode[] | null => {
     let ingredientComponents: React.ReactNode[] | null = [];
-    for (const [ingredientType, ingredientCount] of Object.entries(ingredients)) {
+    for (const ingredientType of Object.keys(ingredients)) {
       if (!isValidIngredient(ingredientType)) {
         continue;
       }
-      for (let i = 0; i < ingredientCount; i++) {
+      const { count } = ingredients[ingredientType];
+      for (let i = 0; i < count; i++) {
         ingredientComponents.push(<BurgerIngredient
           type={ingredientType}
           key={nanoid()}/>);

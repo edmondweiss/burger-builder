@@ -1,17 +1,28 @@
 import styles from "./BurgerIngredient.module.scss";
 
+export type RequiredBurgerIngredient = "bread-top" | "bread-bottom";
 
-export type BurgerIngredientType =
+export type OptionalBurgerIngredient =
   "bacon"
-  | "bread-top"
-  | "bread-bottom"
   | "cheese"
   | "meat"
   | "salad";
 
+export type BurgerIngredientType = RequiredBurgerIngredient | OptionalBurgerIngredient;
+
 type BurgerIngredientProps = Readonly<{
   type: BurgerIngredientType;
 }>;
+
+export const optionalIngredientSet = new Set<OptionalBurgerIngredient>([
+  "bacon",
+  "cheese",
+  "meat",
+  "salad"
+]);
+
+export const isValidIngredient = (ingredient: string): ingredient is OptionalBurgerIngredient =>
+  optionalIngredientSet.has(ingredient as OptionalBurgerIngredient);
 
 export const BurgerIngredient = ({ type }: BurgerIngredientProps) => {
   let ingredient: JSX.Element | null;
