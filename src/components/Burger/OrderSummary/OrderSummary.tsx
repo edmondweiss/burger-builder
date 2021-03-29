@@ -21,7 +21,7 @@ export const OrderSummary = ({ description, items, title, totalPrice }: OrderSum
       <ul>
         {summaryItems}
       </ul>
-      <p><strong>Total Price: ${totalPrice}</strong></p>
+      <p><strong>Total Price: ${totalPrice.toFixed(2)}</strong></p>
       <p>Continue to checkout?</p>
     </>
   );
