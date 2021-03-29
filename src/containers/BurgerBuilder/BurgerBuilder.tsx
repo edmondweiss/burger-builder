@@ -1,36 +1,40 @@
 import { Component } from "react";
-import { Burger, BurgerIngredients} from "../../components/Burger/Burger";
-import { BuildControls } from "../../components/BuildControls/BuildControls";
+import { Burger, BurgerIngredients } from "../../components/Burger/Burger";
+import { BuildControls, PurchaseHandler } from "../../components/BuildControls/BuildControls";
 import { BuildControlClickHandler } from "../../components/BuildControls/BuildControl/BuildControl";
 import { isValidIngredient } from "../../components/Burger/BurgerIngredient/BurgerIngredient";
+import { Modal, ModalCloseHandler } from "../../components/UI/Modal/Modal";
+import { OrderSummary, OrderSummaryItem } from "../../components/Burger/OrderSummary/OrderSummary";
 
 type BurgerBuilderProps = {}
 
 type BurgerBuilderState = {
   ingredients: BurgerIngredients;
+  purchasing: boolean;
   totalPrice: number;
 };
 
 export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
   state: BurgerBuilderState = {
     ingredients: {
-      salad: {
+      lettuce: {
         count: 0,
-        price: 0.4
+        price: 0.50
       },
       bacon: {
         count: 0,
-        price: 0.7
+        price: 1
       },
       cheese: {
         count: 0,
-        price: 0.5
+        price: 0.75
       },
       meat: {
         count: 0,
-        price: 2.4
+        price: 2.5
       }
     },
+    purchasing: false,
     totalPrice: 6
   };
 
@@ -58,25 +62,54 @@ export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderSt
     this.setState({ ingredients: updatedIngredients, totalPrice });
   };
 
-  convertToIngredientToCountMap = (state: BurgerIngredients): Record<string, number> => {
+  convertToIngredientToCountMap = (burgerIngredients: BurgerIngredients): Record<string, number> => {
     const ingredientToCountMap: Record<string, number> = {};
-    Object.keys(state).forEach((key) => {
+    Object.keys(burgerIngredients).forEach((key) => {
       if (isValidIngredient(key)) {
-        ingredientToCountMap[key] = state[key].count;
+        ingredientToCountMap[key] = burgerIngredients[key].count;
       }
     });
     return ingredientToCountMap;
   };
 
+  convertToOrderSummaryItems = (burgerIngredients: BurgerIngredients): OrderSummaryItem[] => {
+    const orderSummaryItems: OrderSummaryItem[] = [];
+    Object.keys(burgerIngredients).forEach((ingredient) => {
+      if (isValidIngredient(ingredient)) {
+        const { count, price } = burgerIngredients[ingredient];
+        orderSummaryItems.push({ name: ingredient, count, price });
+      }
+    });
+    return orderSummaryItems;
+  };
+
+  modalCloseHandler: ModalCloseHandler = (e) => {
+    e.preventDefault();
+    this.setState({ purchasing: false });
+  }
+
+
+  purchaseHandler: PurchaseHandler = () => this.setState({ purchasing: true });
+
   render() {
     return (
       <>
+        <Modal
+          show={this.state.purchasing}
+          close={this.modalCloseHandler}>
+          <OrderSummary
+            title={"Your Order"}
+            description={"A delicious burger with the following ingredients:"}
+            items={this.convertToOrderSummaryItems(this.state.ingredients)}
+          />
+        </Modal>
         <Burger ingredients={this.state.ingredients}/>
         <BuildControls
           items={this.convertToIngredientToCountMap(this.state.ingredients)}
           addHandler={this.addHandler}
           removeHandler={this.removeHandler}
-          price={this.state.totalPrice}/>
+          price={this.state.totalPrice}
+          purchaseHandler={this.purchaseHandler}/>
       </>
     );
   }

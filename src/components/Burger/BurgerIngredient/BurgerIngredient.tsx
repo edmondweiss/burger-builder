@@ -6,7 +6,7 @@ export type OptionalBurgerIngredient =
   "bacon"
   | "cheese"
   | "meat"
-  | "salad";
+  | "lettuce";
 
 export type BurgerIngredientType = RequiredBurgerIngredient | OptionalBurgerIngredient;
 
@@ -18,7 +18,7 @@ export const optionalIngredientSet = new Set<OptionalBurgerIngredient>([
   "bacon",
   "cheese",
   "meat",
-  "salad"
+  "lettuce"
 ]);
 
 export const isValidIngredient = (ingredient: string): ingredient is OptionalBurgerIngredient =>
@@ -48,7 +48,7 @@ export const BurgerIngredient = ({ type }: BurgerIngredientProps) => {
     case "meat":
       ingredient = <div className={styles.Meat}/>;
       break;
-    case "salad":
+    case "lettuce":
       ingredient = <div className={styles.Salad}/>;
       break;
     default:

@@ -1,0 +1,44 @@
+.ModalBackground {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 500;
+}
+
+.Modal {
+  position: fixed;
+  z-index: 501;
+  background-color: white;
+  width: 70%;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px black;
+  border-radius: 8px;
+  padding: 16px;
+  left: 15%;
+  top: 30%;
+  box-sizing: border-box;
+  transition: all 0.3s ease-out;
+}
+
+.ModalClose {
+  display: inline-block;
+  border: none;
+  border-radius: 8px;
+  background-color: #cf8f2e;
+  font-weight: 700;
+  color: white;
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
+  width: 32px;
+  padding: 2px 0px;
+  outline: none;
+}
+
+@media (min-width: 600px) {
+  .Modal {
+    width: 500px;
+    left: calc(50% - 250px);
+  }
+}
