@@ -5,6 +5,7 @@ import { BuildControlClickHandler } from "../../components/BuildControls/BuildCo
 import { isValidIngredient } from "../../components/Burger/BurgerIngredient/BurgerIngredient";
 import { Modal, ModalCloseHandler } from "../../components/UI/Modal/Modal";
 import { OrderSummary, OrderSummaryItem } from "../../components/Burger/OrderSummary/OrderSummary";
+import { Button, DefaultButtonClickHandler } from "../../components/UI/Button/Button";
 
 type BurgerBuilderProps = {}
 
@@ -13,6 +14,8 @@ type BurgerBuilderState = {
   purchasing: boolean;
   totalPrice: number;
 };
+
+const BURGER_BASE_PRICE_IN_DOLLARS = 6;
 
 export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
   state: BurgerBuilderState = {
@@ -35,7 +38,7 @@ export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderSt
       }
     },
     purchasing: false,
-    totalPrice: 6
+    totalPrice: BURGER_BASE_PRICE_IN_DOLLARS
   };
 
   addHandler: BuildControlClickHandler = (itemName) => {
@@ -83,11 +86,12 @@ export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderSt
     return orderSummaryItems;
   };
 
-  modalCloseHandler: ModalCloseHandler = (e) => {
+  continuePurchaseHandler: DefaultButtonClickHandler = () => alert("Not implemented yet!")
+
+  cancelPurchaseHandler: DefaultButtonClickHandler  = (e) => {
     e.preventDefault();
     this.setState({ purchasing: false });
   }
-
 
   purchaseHandler: PurchaseHandler = () => this.setState({ purchasing: true });
 
@@ -96,12 +100,15 @@ export class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderSt
       <>
         <Modal
           show={this.state.purchasing}
-          close={this.modalCloseHandler}>
+          close={this.cancelPurchaseHandler}>
           <OrderSummary
             title={"Your Order"}
             description={"A delicious burger with the following ingredients:"}
             items={this.convertToOrderSummaryItems(this.state.ingredients)}
+            totalPrice={this.state.totalPrice}
           />
+          <Button clickHandler={this.cancelPurchaseHandler} type={"Danger"}>CANCEL</Button>
+          <Button clickHandler={this.continuePurchaseHandler} type={"Success"}>CONTINUE</Button>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
         <BuildControls
