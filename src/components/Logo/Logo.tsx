@@ -1,8 +1,7 @@
 import classes from "./Logo.module.scss";
 import BurgerLogo from "../../assets/burger-logo.png";
-type LogoProps = {}
 
-export const Logo = ({}: LogoProps) => (
+export const Logo = () => (
   <div className={classes.Logo}>
     <img
       src={BurgerLogo}

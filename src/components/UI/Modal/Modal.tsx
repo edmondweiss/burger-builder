@@ -12,10 +12,6 @@ type ModalProps = {
 export const Modal = ({ children, close, show }: ModalProps) => {
   return (
     show ? <>
-      <div
-        className={styles.ModalBackground}
-        onClick={close}>
-      </div>
       <div className={styles.Modal}>
         <button
           className={styles.ModalClose}
